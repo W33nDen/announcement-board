@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Нове оголошення | Дошка оголошень</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="form-page">
+        <div class="form-card">
+          <div class="form-header">
+            <div>
+              <p class="eyebrow">Нове оголошення</p>
+              <h1>Опублікувати пропозицію</h1>
+            </div>
+            <a class="button button-secondary" href="/">Скасувати</a>
+          </div>
+
+          <form class="announcement-form" action="/announcements" method="POST">
+            <fieldset class="category-group">
+              <legend>Категорія</legend>
+              <div class="category-options">
+                <% Object.entries(categoryMeta).forEach(([value, meta]) => { %>
+                  <label class="category-option">
+                    <input
+                      type="radio"
+                      name="category"
+                      value="<%= value %>"
+                      <%= data?.category === value ? 'checked' : '' %>
+                      required
+                    />
+                    <span><%= meta.icon %> <%= meta.label %></span>
+                  </label>
+                <% }) %>
+              </div>
+              <% if (errors.category) { %>
+                <p class="error"><%= errors.category %></p>
+              <% } %>
+            </fieldset>
+
+            <label class="field">
+              <span>Назва</span>
+              <input
+                type="text"
+                name="title"
+                placeholder="Коротка назва оголошення"
+                value="<%= data?.title || '' %>"
+                minlength="5"
+                maxlength="100"
+                required
+              />
+              <% if (errors.title) { %>
+                <p class="error"><%= errors.title %></p>
+              <% } %>
+            </label>
+
+            <label class="field">
+              <span>Опис</span>
+              <textarea
+                name="description"
+                rows="6"
+                placeholder="Детальний опис оголошення..."
+                minlength="10"
+                required
+              ><%= data?.description || '' %></textarea>
+              <% if (errors.description) { %>
+                <p class="error"><%= errors.description %></p>
+              <% } %>
+            </label>
+
+            <label class="field">
+              <span>Ціна</span>
+              <input
+                type="number"
+                name="price"
+                placeholder="0.00"
+                value="<%= data?.price || '' %>"
+                min="0"
+                step="0.01"
+                required
+              />
+              <% if (errors.price) { %>
+                <p class="error"><%= errors.price %></p>
+              <% } %>
+            </label>
+
+            <label class="field">
+              <span>Контактна інформація</span>
+              <input
+                type="text"
+                name="contactInfo"
+                placeholder="Email або телефон"
+                value="<%= data?.contactInfo || '' %>"
+                minlength="5"
+                required
+              />
+              <% if (errors.contactInfo) { %>
+                <p class="error"><%= errors.contactInfo %></p>
+              <% } %>
+            </label>
+
+            <div class="form-actions">
+              <button class="button button-primary" type="submit">Опублікувати</button>
+              <a class="button button-secondary" href="/">Скасувати</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

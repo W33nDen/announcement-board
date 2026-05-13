@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Дошка оголошень</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Практична дошка оголошень</p>
+          <h1>Знайдіть потрібне або опублікуйте власну пропозицію</h1>
+          <p class="hero-copy">
+            Продаж, послуги, робота та інші оголошення в одному акуратному списку.
+          </p>
+        </div>
+        <a class="button button-primary" href="/announcements">Додати оголошення</a>
+      </section>
+
+      <section class="panel">
+        <form class="toolbar" method="GET" action="/">
+          <label class="field">
+            <span>Пошук</span>
+            <input
+              type="text"
+              name="search"
+              value="<%= search %>"
+              placeholder="Шукати оголошення..."
+            />
+          </label>
+
+          <label class="field">
+            <span>Сортування</span>
+            <select name="sort">
+              <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>
+                Новіші спочатку
+              </option>
+              <option value="oldest" <%= sort === 'oldest' ? 'selected' : '' %>>
+                Старіші спочатку
+              </option>
+            </select>
+          </label>
+
+          <button class="button button-primary" type="submit">Знайти</button>
+        </form>
+
+        <% if (announcements.length === 0) { %>
+          <div class="empty-state">
+            <h2>Оголошень не знайдено</h2>
+            <p>Спробуйте змінити пошук або додайте нове оголошення.</p>
+          </div>
+        <% } else { %>
+          <div class="results-head">
+            <p>Знайдено: <strong><%= total %></strong></p>
+            <p>Сторінка <strong><%= currentPage %></strong> з <strong><%= totalPages %></strong></p>
+          </div>
+
+          <div class="cards-grid">
+            <% announcements.forEach((announcement) => { %>
+              <article class="card">
+                <div class="card-top">
+                  <span class="badge badge-<%= announcement.category %>">
+                    <%= categoryMeta[announcement.category].icon %>
+                    <%= categoryMeta[announcement.category].label %>
+                  </span>
+                  <span class="date"><%= formatDate(announcement.createdAt) %></span>
+                </div>
+
+                <h2><%= announcement.title %></h2>
+                <p class="card-description">
+                  <%= announcement.description.length > 100
+                    ? `${announcement.description.substring(0, 100)}...`
+                    : announcement.description %>
+                </p>
+
+                <div class="card-footer">
+                  <strong><%= announcement.price.toFixed(2) %> грн</strong>
+                  <a class="card-link" href="/announcements/<%= announcement.id %>">Детальніше</a>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+
+          <% if (totalPages > 1) { %>
+            <nav class="pagination" aria-label="Пагінація">
+              <a
+                class="button button-secondary <%= currentPage === 1 ? 'is-disabled' : '' %>"
+                href="<%= currentPage === 1 ? '#' : buildPageUrl(currentPage - 1) %>"
+                aria-disabled="<%= currentPage === 1 ? 'true' : 'false' %>"
+              >
+                Попередня
+              </a>
+
+              <div class="page-numbers">
+                <% for (let page = 1; page <= totalPages; page += 1) { %>
+                  <a
+                    class="page-number <%= page === currentPage ? 'is-active' : '' %>"
+                    href="<%= buildPageUrl(page) %>"
+                  >
+                    <%= page %>
+                  </a>
+                <% } %>
+              </div>
+
+              <a
+                class="button button-secondary <%= currentPage === totalPages ? 'is-disabled' : '' %>"
+                href="<%= currentPage === totalPages ? '#' : buildPageUrl(currentPage + 1) %>"
+                aria-disabled="<%= currentPage === totalPages ? 'true' : 'false' %>"
+              >
+                Наступна
+              </a>
+            </nav>
+          <% } %>
+        <% } %>
+      </section>
+    </main>
+  </body>
+</html>
