@@ -66,24 +66,9 @@ app.get('/', async (req, res, next) => {
     const sort = req.query.sort === 'oldest' ? 'oldest' : 'newest';
     const requestedPage = Number(req.query.page) || 1;
 
-    const where = {};
-    if (search) {
-      const normalizedSearch = search.toLocaleLowerCase('uk-UA');
-      const matchingAnnouncements = await prisma.announcement.findMany({
-        select: {
-          id: true,
-          title: true
-        }
-      });
-
-      where.id = {
-        in: matchingAnnouncements
-          .filter((announcement) =>
-            announcement.title.toLocaleLowerCase('uk-UA').includes(normalizedSearch)
-          )
-          .map((announcement) => announcement.id)
-      };
-    }
+    const where = search
+      ? { title: { contains: search } }
+      : {};
 
     const total = await prisma.announcement.count({ where });
     const totalPages = Math.ceil(total / PER_PAGE);
