@@ -20,7 +20,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: [],
+  apis: ['./src/routes/*.js'],
 }
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions)
@@ -29,10 +29,11 @@ app.use(express.json())
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
-app.use(celebrateErrors())
+import announcementsRouter from './src/routes/announcements.routes.js'
 
-// Our routes would go here, for example:
-// app.use('/api/announcements', announcementsRouter)
+app.use('/announcements', announcementsRouter)
+
+app.use(celebrateErrors())
 
 // 404 Not Found handler - must be after all routes
 app.use((req, res) => {

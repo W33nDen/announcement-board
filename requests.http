@@ -1,0 +1,95 @@
+### 1. GET /announcements без параметрів
+GET http://localhost:3000/announcements
+Accept: application/json
+
+###
+
+### 2. GET /announcements з параметром search
+GET http://localhost:3000/announcements?search=ASUS
+Accept: application/json
+
+###
+
+### 3. GET /announcements з параметрами sort та page
+GET http://localhost:3000/announcements?sort=oldest&page=1
+Accept: application/json
+
+###
+
+### 4. GET /announcements/:id з id який існує
+# ПРИМІТКА: Будь ласка, переконайтеся, що id існує в базі даних (наприклад, створений після кроку 6)
+GET http://localhost:3000/announcements/1
+Accept: application/json
+
+###
+
+### 5. GET /announcements/:id з ID якого не існує в базі даних
+GET http://localhost:3000/announcements/9999
+Accept: application/json
+
+###
+
+### 6. POST /announcements з валідними даними
+POST http://localhost:3000/announcements
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Ноутбук ASUS ROG Strix",
+  "description": "Потужний ігровий ноутбук, RTX 4060, 16GB RAM, SSD 512GB. Стан ідеальний, купувався пів року тому.",
+  "price": 38500,
+  "category": "sale",
+  "contactInfo": "0991234567"
+}
+
+###
+
+### 7. POST /announcements з невалідними даними (щоб показати роботу валідації celebrate)
+POST http://localhost:3000/announcements
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "ASUS",
+  "description": "Коротко",
+  "price": -100,
+  "category": "invalid_category",
+  "contactInfo": "123"
+}
+
+###
+
+### 8. PATCH /announcements/:id з частковими даними
+# ПРИМІТКА: Використовуйте id, який існує в базі даних
+PATCH http://localhost:3000/announcements/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "price": 37000,
+  "description": "Оновлений опис: ігровий ноутбук у відмінному стані, можливий торг."
+}
+
+###
+
+### 9. PATCH /announcements/:id з ID якого не існує в базі даних
+PATCH http://localhost:3000/announcements/9999
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Оновлена назва неіснуючого оголошення"
+}
+
+###
+
+### 10. DELETE /announcements/:id
+# ПРИМІТКА: Використовуйте id, який існує в базі даних
+DELETE http://localhost:3000/announcements/1
+Accept: application/json
+
+###
+
+### 11. DELETE /announcements/:id з ID якого не існує в базі даних
+DELETE http://localhost:3000/announcements/9999
+Accept: application/json
